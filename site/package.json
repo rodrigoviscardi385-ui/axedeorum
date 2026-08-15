@@ -1,0 +1,13 @@
+{
+  "name": "axedeorum-site",
+  "version": "2.0.0",
+  "description": "Axé de Orum — Guias Artesanais de Umbanda e Candomblé (site estático)",
+  "private": true,
+  "scripts": {
+    "build": "echo \"Site estático — sem build necessário\"",
+    "start": "npx serve .",
+    "check": "node --check app.js",
+    "deploy:surge": "surge . axedeorum.surge.sh",
+    "deploy:netlify": "netlify deploy --prod --dir=."
+  }
+}

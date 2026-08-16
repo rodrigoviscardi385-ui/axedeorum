@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://axedeorum.netlify.app/sitemap.xml

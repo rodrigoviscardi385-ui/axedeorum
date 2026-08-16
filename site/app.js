@@ -359,7 +359,7 @@ function renderPingenteGrid(sel, key) {
 
 function pendMedia(id, p) {
   return '<span class="pend-media">' +
-    '<img class="pend-img" src="assets/pingentes/' + id + '.png" alt="' + p.name + '" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.querySelector(\'.pend-fallback\').style.display=\'\';">' +
+    '<img class="pend-img" src="assets/pingentes/' + id + '.png" alt="Pingente ' + p.name + ' para guia de ' + (orixaOf(p.orixa[0]) ? orixaOf(p.orixa[0]).name : 'orixá') + ' - Axé de Orum" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.querySelector(\'.pend-fallback\').style.display=\'\';">' +
     '<span class="pend-fallback" style="color:#A8852A;display:none">' + p.svg() + '</span>' +
     '</span>';
 }

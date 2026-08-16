@@ -1,0 +1,57 @@
+<section class="section admin">
+  <div class="container">
+    <h2>Painel Administrativo - Axé de Orum</h2>
+    
+    <% if (user && user.role === 'admin') { %>
+      <div class="admin-actions">
+        <a href="/admin/products/novo" class="btn btn-gold">Novo Produto</a>
+        <a href="/" class="btn btn-outline">Voltar ao site</a>
+      </div>
+      
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Preço</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach(product => { %>
+              <tr>
+                <td><%= product.name %></td>
+                <td><span class="badge <%= product.category %><%= product.category %></span><%= product.category %></td>
+                <td>R$ <%= product.price %></td>
+                <td>
+                  <a href="/admin/products/editar/<%= product.id %>" class="action-edit">Editar</a>
+                  <button class="action-del" onclick="deleteProduct(<%= product.id %>)">Excluir</button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p>Acesso restrito a administradores.</p>
+      <a href="/auth/login" class="btn btn-gold">Login Admin</a>
+    <% } %>
+  </div>
+</section>
+
+<script>
+function deleteProduct(id) {
+  if (confirm('Tem certeza que deseja excluir este produto?')) {
+    fetch(`/admin/products/excluir/${id}`, {
+      method: 'DELETE',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) location.reload();
+      else alert('Erro ao excluir');
+    });
+  }
+}
+</script>

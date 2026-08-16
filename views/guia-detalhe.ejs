@@ -1,0 +1,38 @@
+<section class="section builder">
+  <div class="container">
+    <header class="section-head">
+      <h2>Minha Guia: <%= guide.orixa || 'Personalizada' %></h2>
+      <p>Guia criada em <%= guide.created_at ? guide.created_at.split(' ')[0] : '—' %></p>
+    </header>
+
+    <div class="builder-grid">
+      <div class="builder-form">
+        <p class="hint">Sua guia foi salva no sistema. Você pode modificar ou solicitar o orçamento.</p>
+        
+        <ul class="resumo-simplificado">
+          <li><strong>Orixá:</strong> <%= guide.orixa || 'Não especificado' %></li>
+          <li><strong>Cores:</strong> <%= guide.colors ? JSON.parse(guide.colors).length + ' cores' : 'Não informado' %></li>
+          <li><strong>Tamanho:</strong> <%= guide.size %> cm</li>
+          <li><strong>Firmas:</strong> <%= guide.firmes ? 'Personalizadas' : 'Não informado' %></li>
+          <li><strong>Pingente:</strong> <%= guide.pendant_id ? 'Selecionado' : 'Não incluso' %></li>
+          <li><strong>Preço:</strong> R$ <%= guide.price || 'Confirmar' %></li>
+        </ul>
+
+        <% if (guide.status === 'rascunho') { %>
+          <a id="wa-btn" class="btn btn-wa" href="/whatsapp/solicitar-orcamento">Pedir orçamento no WhatsApp</a>
+        <% } else { %>
+          <span class="status-status">Orçamento confirmado</span>
+        <% } %>
+      </div>
+
+      <aside class="builder-panel">
+        <div class="acoes">
+          <button class="btn btn-outline" onclick="location.href='/builder/criar'">Editar guia</button>
+          <% if (guide.status === 'rascunho') { %>
+            <button class="btn btn-gold" onclick="location.href='/whatsapp/solicitar-orcamento'">Finalizar pedido</button>
+          <% } %>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

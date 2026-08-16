@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/hero.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233E2A18'/%3E%3Cpath d='M32 8l6 14h16l-12 10 5 16-15-9-15 9 5-16-12-10h16z' fill='%23C9A227'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -178,8 +178,13 @@
 
         <aside class="builder-panel">
           <div class="preview-panel">
+            <div class="view-toggle" role="radiogroup" aria-label="Tipo de visualizaÃ§Ã£o da guia">
+              <label><input type="radio" name="view3d" value="3d" checked><span>3D</span></label>
+              <label><input type="radio" name="view3d" value="2d"><span>2D</span></label>
+            </div>
+            <div id="preview-3d" class="preview-3d" aria-label="Preview 3D da guia"></div>
             <div id="preview-svg" class="preview-svg" aria-label="Preview da guia"></div>
-            <p class="preview-note">Preview ilustrativo â€” a peÃ§a Ã© artesanal e passa por consagraÃ§Ã£o.</p>
+            <p class="preview-note">Preview ilustrativo â€” a peÃ§a Ã© artesanal e passa por consagraÃ§Ã£o. Gire a guia 3D com o mouse ou o dedo.</p>
           </div>
           <div class="resumo">
             <h3>Seu pedido</h3>
@@ -279,6 +284,7 @@
   </div>
 </footer>
 
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
+<script type="module" src="preview3d.js"></script>
 </body>
 </html>

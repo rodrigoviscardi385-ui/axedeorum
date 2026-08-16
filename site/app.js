@@ -172,7 +172,8 @@ const state = {
   showPend2: false,
   buzios: false,
   palha: false,
-  entremeio: false
+  entremeio: false,
+  view3d: '3d'
 };
 
 const orixaOf = (id) => ORIXAS.find(o => o.id === id);
@@ -486,6 +487,12 @@ function colorSeq(n) {
   return seq;
 }
 
+function currentPattern() {
+  const perFio = Math.min(Math.round((state.tamanho * 1.9) / state.beadCm), 78);
+  const n = Math.max(24, perFio);
+  return { n, seq: colorSeq(n) };
+}
+
 function beadSVG(x, y, r, hex) {
   return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + hex + '" stroke="' + shade(hex, .55) + '" stroke-width="1"/>' +
     '<circle cx="' + (x - r * .32) + '" cy="' + (y - r * .38) + '" r="' + (r * .42) + '" fill="#fff" opacity=".5"/>';
@@ -514,9 +521,7 @@ function renderPreview() {
   const firmaR = beadR * 1.85;
   const fios = state.fios;
   const mid = (fios - 1) / 2;
-  const perFio = Math.min(Math.round((state.tamanho * 1.9) / state.beadCm), 78);
-  const n = Math.max(24, perFio);
-  const seq = colorSeq(n);
+  const { n, seq } = currentPattern();
 
   const firmaColors = { lisa: state.firma, listrada: state.firma, aurora: state.firma, olho: state.firma };
   const defs =
@@ -651,6 +656,38 @@ function refresh() {
   renderPreview();
   renderResumo();
   updateWa();
+  sync3d();
+}
+
+function sync3d() {
+  if (!window.guia3d || !window.guia3d.available) return;
+  if (state.view3d !== '3d') return;
+  const { n, seq } = currentPattern();
+  window.guia3d.render({
+    colors: curColors(),
+    seq,
+    fios: state.fios,
+    trancado: state.trancado,
+    firma: state.firma,
+    firmaType: state.firmaType,
+    buzios: state.buzios,
+    entremeio: state.entremeio,
+    beadCm: state.beadCm,
+    pend1: state.pend1 ? { svg: PEND[state.pend1].svg() } : null,
+    pend2: state.pend2 && state.showPend2 ? { svg: PEND[state.pend2].svg() } : null,
+    showPend2: state.showPend2 && !!state.pend2
+  });
+}
+
+function setView(mode) {
+  state.view3d = mode;
+  const el3d = $('#preview-3d');
+  const el2d = $('#preview-svg');
+  const use3d = mode === '3d' && window.guia3d && window.guia3d.available;
+  el3d.hidden = !use3d;
+  el2d.hidden = use3d;
+  if (use3d && window.guia3d) window.guia3d.resize();
+  refresh();
 }
 
 function syncTrancadoToggle() {
@@ -715,6 +752,10 @@ function bindEvents() {
     refresh();
   }));
 
+  $$('input[name="view3d"]').forEach(r => r.addEventListener('change', (e) => {
+    setView(e.target.value);
+  }));
+
   $$('input[name="fios"]').forEach(r => r.addEventListener('change', (e) => {
     state.fios = parseInt(e.target.value, 10);
     syncTrancadoToggle();
@@ -769,6 +810,15 @@ function init() {
   bindEvents();
   syncTrancadoToggle();
   observeReveal();
+  const can3d = window.guia3d && window.guia3d.available;
+  if (!can3d) {
+    state.view3d = '2d';
+    const r = $('input[name="view3d"][value="2d"]');
+    const r3 = $('input[name="view3d"][value="3d"]');
+    if (r) r.checked = true;
+    if (r3) r3.disabled = true;
+  }
+  setView(state.view3d);
 }
 
 document.addEventListener('DOMContentLoaded', init);
